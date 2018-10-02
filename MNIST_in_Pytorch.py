@@ -5,15 +5,16 @@ import torch.optim
 from torchvision import datasets, transforms
 from torch.autograd import Variable
 
-kwargs = {} # nur bei CUDA kwargs = {'num_workers': 1, 'pin_memory': True}
-### Stellt Daten bereit in den Ordner Data 
+kwargs = {} # for usage of CUDA kwargs = {'num_workers': 1, 'pin_memory': True}
+
+### Generate Traindata 
 train_data = torch.utils.data.DataLoader(
         datasets.MNIST('data', train=True, download=True,
                        transform=transforms.Compose([transforms.ToTensor(),
                        transforms.Normalize((0.1307,),(0.3081,))])),
         batch_size=64, shuffle=True, **kwargs)
 
-### Testdaten generieren
+### Generate Testdata
 test_data = torch.utils.data.DataLoader(
         datasets.MNIST('data', train=False,
                        transform=transforms.Compose([transforms.ToTensor(),
@@ -21,10 +22,9 @@ test_data = torch.utils.data.DataLoader(
         batch_size=64, shuffle=True, **kwargs)
 
 
-
-class Netz(nn.Module):
+class Net(nn.Module):
     def __init__(self):
-        super(Netz, self).__init__()
+        super(Net, self).__init__()
         self.conv1 = nn.Conv2d(1,10,kernel_size=5)
         self.conv2 = nn.Conv2d(10,20,kernel_size=5)
         self.conv_dropout = nn.Dropout2d()
@@ -42,7 +42,7 @@ class Netz(nn.Module):
         exit()
     
 
-model = Netz()
+model = Net()
 
 optimizer = torch.optim.SGD(model.parameters(), lr = 0.1, momentum = 0.8)
 
